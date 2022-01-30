@@ -2,10 +2,11 @@ import pygame
 from screen import Screen
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self) -> None:
+    def __init__(self, bullet_group) -> None:
         super().__init__()
         self.image = pygame.image.load('assets/spaceship.png')
         self.rect = self.image.get_rect()
+        self.bullet_group = bullet_group
 
         self.rect.centerx = Screen.WIDTH // 2
         self.rect.y = Screen.HEIGHT - 80
