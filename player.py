@@ -34,6 +34,7 @@ class Player(pygame.sprite.Sprite):
         pass
 
     def shoot(self):
-        self.shoot_sound.play()
-        PlayerBullet(self.rect.centerx, self.rect.centery, self.bullet_group)
+        if len(self.bullet_group) < 2:
+            self.shoot_sound.play()
+            PlayerBullet(self.rect.centerx, self.rect.centery, self.bullet_group)
              
