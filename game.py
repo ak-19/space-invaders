@@ -2,7 +2,6 @@ import pygame
 from alien import Alien
 
 from color import Color
-from eventvalidator import EventValidator
 from gametext import GameText
 from player import Player
 
@@ -10,10 +9,12 @@ class Game:
 
     def __init__(self, display) -> None:
         self.display = display        
-        self.event_validation = EventValidator()
         self.fps = 60
         self.clock = pygame.time.Clock()
         self.game_stats = GameText(display)
+
+        self.run = True
+        self.pause = False
 
         self.setup_sprites()
   
@@ -36,7 +37,14 @@ class Game:
         pygame.display.update()
 
     def run_game_loop(self):
-        while self.event_validation.ok():
+        while self.run:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.run = False
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    self.run = False                                               
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    self.player.shoot()
 
             self.update()
 
@@ -49,7 +57,8 @@ class Game:
     def setup_sprites(self):
         self.player_bullet_group = pygame.sprite.Group()
         self.alien_bullet_group = pygame.sprite.Group()
-        self.player_group = pygame.sprite.Group(Player(self.player_bullet_group))
+        self.player = Player(self.player_bullet_group)
+        self.player_group = pygame.sprite.Group(self.player)
         self.alien_group = pygame.sprite.Group()
 
         for i in range(12):

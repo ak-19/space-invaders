@@ -1,4 +1,5 @@
 import pygame
+from playerbullet import PlayerBullet
 from screen import Screen
 
 class Player(pygame.sprite.Sprite):
@@ -25,8 +26,8 @@ class Player(pygame.sprite.Sprite):
         elif pressed_keys[pygame.K_RIGHT] and self.rect.right <= Screen.WIDTH:
             self.rect.x += self.velocity
 
-        if pressed_keys[pygame.K_SPACE]:
-            self.shoot()
+        # if pressed_keys[pygame.K_SPACE]:
+        #     self.shoot()
 
     #helper methods    
     def reset(self):
@@ -34,4 +35,5 @@ class Player(pygame.sprite.Sprite):
 
     def shoot(self):
         self.shoot_sound.play()
+        PlayerBullet(self.rect.centerx, self.rect.centery, self.bullet_group)
              
