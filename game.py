@@ -41,7 +41,7 @@ class Game:
     def draw(self):
         self.display.fill(Color.BLACK)
 
-        self.game_stats.draw_stats(self.score)
+        self.draw_game_stats()
                     
         self.player_bullet_group.draw(self.display)
         self.alien_bullet_group.draw(self.display)
@@ -79,7 +79,7 @@ class Game:
             self.alien_group.add(Alien(64 * i, 100, 1, self.alien_bullet_group))          
 
     def draw_game_stats(self):
-        pass
+        self.game_stats.draw_stats(self.score, self.round_number, self.player.lives)
 
     def check_collisions(self):
         pass
