@@ -13,7 +13,6 @@ class PlayerBullet(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.y -= self.velocity
-        
         if self.rect.bottom < 0: self.kill()
     
              

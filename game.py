@@ -62,7 +62,7 @@ class Game:
         self.alien_group = pygame.sprite.Group()
 
         for i in range(12):
-            self.alien_group.add(Alien(64 * i,100))          
+            self.alien_group.add(Alien(64 * i, 100, 2, self.alien_bullet_group))          
 
     def draw_game_stats(self):
         pass
