@@ -16,6 +16,16 @@ class Game:
         self.run = True
         self.pause = False
 
+        self.round_number = 1
+        self.score = 0
+
+
+        self.new_round_sound = pygame.mixer.Sound('assets/new_round.wav')
+        self.breach_sound = pygame.mixer.Sound('assets/breach.wav')
+        self.alien_hit_sound = pygame.mixer.Sound('assets/alien_hit.wav')
+        self.player_hit_sound = pygame.mixer.Sound('assets/player_hit.wav')
+        
+
         self.setup_sprites()
   
     def update(self):
@@ -24,10 +34,14 @@ class Game:
         self.player_group.update()
         self.alien_group.update()
 
+        self.shift_aliens()
+        self.check_collisions()
+        self.check_round_completion()
+
     def draw(self):
         self.display.fill(Color.BLACK)
 
-        self.game_stats.draw_stats(123)
+        self.game_stats.draw_stats(self.score)
                     
         self.player_bullet_group.draw(self.display)
         self.alien_bullet_group.draw(self.display)
@@ -62,7 +76,7 @@ class Game:
         self.alien_group = pygame.sprite.Group()
 
         for i in range(12):
-            self.alien_group.add(Alien(64 * i, 100, 2, self.alien_bullet_group))          
+            self.alien_group.add(Alien(64 * i, 100, 1, self.alien_bullet_group))          
 
     def draw_game_stats(self):
         pass
