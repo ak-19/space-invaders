@@ -28,6 +28,6 @@ class GameText:
         self.display.blit(round, round_rect)
         self.display.blit(lives, lives_rect)
 
-
-        pygame.draw.line(self.display, Color.WHITE, (0, 50), (Screen.WIDTH, 50), width=1)
+        pygame.draw.line(self.display, Color.WHITE, (0, 50), (Screen.WIDTH, 50), width = 1)
+        pygame.draw.line(self.display, Color.WHITE, (0, Screen.HEIGHT - 100), (Screen.WIDTH, Screen.HEIGHT - 100), width = 1)
 

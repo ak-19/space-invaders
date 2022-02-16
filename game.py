@@ -4,6 +4,7 @@ from alien import Alien
 from color import Color
 from gametext import GameText
 from player import Player
+from screen import Screen
 
 class Game:
 
@@ -75,8 +76,7 @@ class Game:
         self.player_group = pygame.sprite.Group(self.player)
         self.alien_group = pygame.sprite.Group()
 
-        for i in range(12):
-            self.alien_group.add(Alien(64 * i, 100, 1, self.alien_bullet_group))          
+        self.start_new_round()
 
     def draw_game_stats(self):
         self.game_stats.draw_stats(self.score, self.round_number, self.player.lives)
@@ -86,9 +86,36 @@ class Game:
 
     def shift_aliens(self):
         pass    
+        #determine if invaders hit the edge
+        shift = False
+        for alien in self.alien_group.sprites():
+            if alien.rect.left <= 0 or alien.rect.right >= Screen.WIDTH:
+                shift = True
+                break
 
+        if shift:
+            breach = False
+            for alien in self.alien_group.sprites():
+                alien.direction *=  -1
+                alien.rect.y += self.round_number * 10
+                alien.rect.x += alien.velocity * alien.direction
+                if alien.rect.bottom > Screen.HEIGHT - 100:
+                    breach = True
+                    break
+            
+            if breach:
+                self.breach_sound.play()
+                self.player.lives -= 1
+                self.check_game_status()
+        
     def start_new_round(self):
-        pass
+        for i in range(11):
+            for j in range(5):
+                self.alien_group.add(Alien(64 + 64 * i, 64 + 64 * j, 1, self.alien_bullet_group))       
+
+        self.new_round_sound.play()
+        self.pause_game()
+
 
     def check_round_completion(self):
         pass

@@ -23,14 +23,9 @@ class Alien(pygame.sprite.Sprite):
 
 
     def update(self):
-        if self.rect.x + self.direction * self.velocity + 64 >= Screen.WIDTH or self.rect.x + self.direction * self.velocity < 0:
-            self.direction *= - 1
-
         self.rect.x += self.direction * self.velocity 
-
         if randint(1, 1000) > 999 and len(self.bullet_group) < 3:
             self.shoot()
-
 
     #helper methods    
     def reset(self):
