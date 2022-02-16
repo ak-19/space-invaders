@@ -31,7 +31,8 @@ class Player(pygame.sprite.Sprite):
 
     #helper methods    
     def reset(self):
-        pass
+        self.rect.centerx = Screen.WIDTH // 2
+        self.rect.bottom = Screen.HEIGHT
 
     def shoot(self):
         if len(self.bullet_group) < 2:

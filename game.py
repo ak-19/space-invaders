@@ -15,40 +15,35 @@ class Game:
         self.game_stats = GameText(display)
 
         self.run = True
-        self.pause = False
-
-        self.round_number = 1
-        self.score = 0
-
 
         self.new_round_sound = pygame.mixer.Sound('assets/new_round.wav')
         self.breach_sound = pygame.mixer.Sound('assets/breach.wav')
         self.alien_hit_sound = pygame.mixer.Sound('assets/alien_hit.wav')
         self.player_hit_sound = pygame.mixer.Sound('assets/player_hit.wav')
         
-
-        self.setup_sprites()
+        self.setup_game()
   
-    def update(self):
+    def setup_game(self):
+        self.round_number = 1
+        self.score = 0
+        self.setup_sprites()
+
+    def update(self):   
         self.player_bullet_group.update()
         self.alien_bullet_group.update()
         self.player_group.update()
         self.alien_group.update()
-
         self.shift_aliens()
         self.check_collisions()
         self.check_round_completion()
 
     def draw(self):
         self.display.fill(Color.BLACK)
-
-        self.draw_game_stats()
-                    
+        self.draw_game_stats()                    
         self.player_bullet_group.draw(self.display)
         self.alien_bullet_group.draw(self.display)
         self.player_group.draw(self.display)
         self.alien_group.draw(self.display)
-
         pygame.display.update()
 
     def run_game_loop(self):
@@ -57,12 +52,11 @@ class Game:
                 if event.type == pygame.QUIT:
                     self.run = False
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    self.run = False                                               
+                    self.run = False                                 
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     self.player.shoot()
 
             self.update()
-
             self.draw()
                                     
             self.clock.tick(self.fps)
@@ -91,7 +85,6 @@ class Game:
         for alien in self.alien_group.sprites():
             if alien.rect.left <= 0 or alien.rect.right >= Screen.WIDTH:
                 shift = True
-                break
 
         if shift:
             breach = False
@@ -101,7 +94,6 @@ class Game:
                 alien.rect.x += alien.velocity * alien.direction
                 if alien.rect.bottom > Screen.HEIGHT - 100:
                     breach = True
-                    break
             
             if breach:
                 self.breach_sound.play()
@@ -114,20 +106,51 @@ class Game:
                 self.alien_group.add(Alien(64 + 64 * i, 64 + 64 * j, 1, self.alien_bullet_group))       
 
         self.new_round_sound.play()
-        self.pause_game()
-
+        self.pause_game('Start new round', 'press enter to start')
 
     def check_round_completion(self):
         pass
 
     def check_game_status(self):
-        pass
+        self.alien_bullet_group.empty()
+        self.player_bullet_group.empty()
 
-    def pause_game(self):
-        pass
+        self.player.reset()
+        for alien in self.alien_group.sprites(): alien.reset()
+        
+        if self.player.lives == 0:
+            self.reset_game('Play again?', 'Press enter to play')
+        else:
+            self.pause_game('Lost life', 'press enter to start over')
 
-    def reset_game(self):
-        pass
+    def pause_game(self, main_text, sub_text = ''):
+        self.game_stats.draw_main_text(main_text, sub_text)
+        paused = True
+        while paused:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                    paused = False   
+                if event.type == pygame.QUIT:
+                    paused = False
+                    self.run = False
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    paused = False
+                    self.run = False                                                     
+
+    def reset_game(self, text = '', sub_text = ''):
+        self.game_stats.draw_main_text(text, sub_text)
+        paused = True
+        while paused:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                    self.setup_game() 
+                    paused = False
+                elif event.type == pygame.QUIT:
+                    paused = False
+                    self.run = False
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    paused = False
+                    self.run = False
     
 
                   

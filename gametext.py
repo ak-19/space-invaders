@@ -8,6 +8,25 @@ class GameText:
         self.display = display
         self.main_font = pygame.font.Font('assets/font.ttf', 42)
         self.stats_font = pygame.font.Font('assets/font.ttf', 22)
+
+    def draw_main_text(self, text, sub_text):
+
+        self.display.fill(Color.BLACK)
+
+        main_text = self.main_font.render(text, True, Color.WHITE, Color.BLACK)
+        main_text_rect = main_text.get_rect()
+
+        s_text = self.stats_font.render(sub_text, True, Color.WHITE, Color.BLACK)
+        s_rect = s_text.get_rect()
+
+
+        s_rect.center = (Screen.WIDTH // 2, Screen.HEIGHT // 2 + 60)    
+        main_text_rect.center = (Screen.WIDTH // 2, Screen.HEIGHT // 2)    
+
+        self.display.blit(s_text, s_rect)
+        self.display.blit(main_text, main_text_rect)
+
+        pygame.display.update()
         
     def draw_stats(self, score, round, lives):
         score = self.stats_font.render(f'Score: {score}', True, Color.WHITE, Color.BLACK)
