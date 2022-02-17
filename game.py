@@ -19,6 +19,7 @@ class Game:
         self.new_round_sound = pygame.mixer.Sound('assets/new_round.wav')
         self.breach_sound = pygame.mixer.Sound('assets/breach.wav')
         self.alien_hit_sound = pygame.mixer.Sound('assets/alien_hit.wav')
+        self.alien_hit_sound.set_volume(0.1)
         self.player_hit_sound = pygame.mixer.Sound('assets/player_hit.wav')
         
         self.setup_game()
@@ -76,13 +77,23 @@ class Game:
         self.game_stats.draw_stats(self.score, self.round_number, self.player.lives)
 
     def check_collisions(self):
-        pass
+        if pygame.sprite.groupcollide(self.player_bullet_group, self.alien_group, True, True):
+            self.alien_hit_sound.play()
+            self.score += 100
+
+        player_hit = pygame.sprite.groupcollide(self.alien_bullet_group, self.player_group, True, False)
+        
+        if player_hit:
+            self.player_hit_sound.play()
+            self.player.lives -= len(player_hit)
+
+            self.check_game_status()
 
     def shift_aliens(self):
         pass    
         #determine if invaders hit the edge
         shift = False
-        for alien in self.alien_group.sprites():
+        for alien in self.alien_group:
             if alien.rect.left <= 0 or alien.rect.right >= Screen.WIDTH:
                 shift = True
 
@@ -109,7 +120,10 @@ class Game:
         self.pause_game('Start new round', 'press enter to start')
 
     def check_round_completion(self):
-        pass
+        if len(self.alien_group) == 0:
+            self.score += 1000 * self.round_number
+            self.round_number += 1
+            self.start_new_round()
 
     def check_game_status(self):
         self.alien_bullet_group.empty()
