@@ -119,7 +119,7 @@ class Game:
         for alien in self.alien_group.sprites(): alien.reset()
         
         if self.player.lives == 0:
-            self.reset_game('Play again?', 'Press enter to play')
+            self.reset_game(f'final score {self.score}', 'Press "enter" to play')
         else:
             self.pause_game('Lost life', 'press enter to start over')
 
