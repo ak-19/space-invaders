@@ -117,7 +117,7 @@ class Game:
                 self.alien_group.add(Alien(64 + 64 * i, 64 + 64 * j, 1, self.alien_bullet_group))       
 
         self.new_round_sound.play()
-        self.pause_game('Start new round', 'press enter to start')
+        self.pause_game(f'Start round {self.round_number}', 'press enter to start')
 
     def check_round_completion(self):
         if len(self.alien_group) == 0:
