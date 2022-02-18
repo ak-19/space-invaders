@@ -116,6 +116,8 @@ class Game:
             for j in range(5):
                 self.alien_group.add(Alien(64 + 64 * i, 64 + 64 * j, 1, self.alien_bullet_group))       
 
+        self.player.reset()
+        
         self.new_round_sound.play()
         self.pause_game(f'Start round {self.round_number}', 'press enter to start')
 
